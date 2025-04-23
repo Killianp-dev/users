@@ -1,81 +1,88 @@
-# Projet Django
+# Django Project
 
-Ce projet est une application Django configurée pour l'authentification utilisateur via email, la gestion des utilisateurs personnalisés, et une interface utilisateur simple pour se connecter et consulter son profil.
+🖥️ This project is a Django application configured for user authentication via email, custom user management, and a simple UI to log in and view user profiles.
 
-## Prérequis
-
-- Python 3.9 ou version ultérieure
-- pip (installé avec Python)
-- Un environnement virtuel (optionnel mais recommandé)
+## Prerequisites
+- Python 3.9 or later
+- pip (comes with Python)
+- Virtual environment (optional but recommended)
 
 ## Installation
 
-1. Clonez ce dépôt :
-   git clone <URL_DU_DEPOT>
-   cd <NOM_DU_DEPOT>
+1. Clone this repository:
+```bash
+git clone https://github.com/Killianp-dev/users
+cd <REPOSITORY_NAME>
+```
 
-2. Installez les dépendances :
+2. Install dependencies:
+   ```bash
    pip install -r requirements.txt
+   ```
 
-3. Configurez les variables d'environnement dans un fichier `.env` à la racine du projet. Par exemple :
-   DJANGO_SECRET_KEY='votre-clé-secrète-django'
+3. Configure environment variables in a `.env` file at the root of the project. Example:
+```
+DJANGO_SECRET_KEY='your-django-secret-key'
+```
 
-4. Appliquez les migrations :
-   python manage.py migrate
+4. Apply migrations:
+```bash
+python manage.py migrate
+```
 
-5. Lancez le serveur de développement :
+5. Start the development server:
+   ```bash
    python manage.py runserver
+   ```
 
-Accédez à l'application dans votre navigateur à l'adresse [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
+6. Access the application in your browser at `http://127.0.0.1:8000/`.
 
-## Fonctionnalités
+## Features
 
-### Authentification personnalisée
+### Custom Authentication
+- Custom user model (`CustomUser`) with email as the main identifier.
+- User management through Django Admin.
+- Email verification using Django Allauth.
 
-- Utilisation d'un modèle d'utilisateur personnalisé (CustomUser) avec email comme identifiant principal.
-- Gestion des utilisateurs via Django Admin.
-- Prise en charge de la vérification par email grâce à Django Allauth.
+### User Interface
+- Login page (`login.html`).
+- Profile page (`profile.html`) displaying logged-in user information.
 
-### Interface utilisateur
+### Testing and Quality
+- Unit tests for the `CustomUser` model using pytest.
+- pytest configuration available in `pytest.ini`.
 
-- Une page de connexion (`login.html`).
-- Une page de profil (`profile.html`) affichant les informations de l'utilisateur connecté.
-
-## Test et qualité
-
-- Tests unitaires pour le modèle `CustomUser` avec `pytest`.
-- Configuration de `pytest` disponible dans `pytest.ini`.
-
-## Structure du projet
-
-- `models.py` : Modèle utilisateur personnalisé.
-- `views.py` : Vue pour la redirection et la page de profil.
-- `urls.py` : Routage des URLs de l'application.
-- `templates/` : Templates HTML avec gestion de l'authentification.
-- `static/css/style.css` : Fichier CSS pour le style de l'application.
-- `requirements.txt` : Liste des dépendances Python.
-- `.env` : Variables d'environnement (exemple inclus).
+## Project Structure
+- `models.py`: Custom user model.
+- `views.py`: Views for redirection and profile page.
+- `urls.py`: URL routing for the application.
+- `templates/`: HTML templates with authentication management.
+- `static/css/style.css`: CSS file for application styling.
+- `requirements.txt`: List of Python dependencies.
+- `.env`: Environment variables (example included).
 
 ## Tests
-
-Pour exécuter les tests :
+To run tests:
+```bash
 pytest
+```
 
-## Déploiement
+## Deployment
 
-### Fichiers statiques
-
-Pour préparer les fichiers statiques pour la production :
+### Static Files
+Prepare static files for production:
+```bash
 python manage.py collectstatic
+```
 
-### Production avec WSGI
+### Production with WSGI
+Use the provided `wsgi.py` to set up the project with a WSGI server such as Gunicorn or uWSGI.
 
-Utilisez le fichier `wsgi.py` pour configurer le projet avec un serveur WSGI tel que Gunicorn ou uWSGI.
+### ASGI for WebSockets
+`asgi.py` is included for setups requiring ASGI protocol (e.g., WebSockets).
 
-### ASGI pour WebSockets
+## Contributors
+- KillianP
 
-Le fichier `asgi.py` est inclus pour les configurations nécessitant le protocole ASGI (ex : WebSockets).
-
-## Contributeurs
-
-KillianP
+## License
+This project is under the MIT License.

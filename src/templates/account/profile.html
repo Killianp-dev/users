@@ -1,0 +1,13 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load allauth account %}
+
+{% block head_title %}
+{% endblock head_title %}
+
+{% block content %}
+<p>Vous êtes connecté en tant que {{ user.email }}</p>
+{% endblock content %}
+
+{% block extra_body %}
+{% endblock %}

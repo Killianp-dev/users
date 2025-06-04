@@ -169,6 +169,9 @@ ACCOUNT_EMAIL_REQUIRED = True  # Exiger l'email pour l'inscription
 ACCOUNT_USERNAME_REQUIRED = False  # Désactiver le champ username
 ACCOUNT_EMAIL_VERIFICATION = "none"  # Activer la vérification d'email
 
+# Redirection après connexion
+LOGIN_REDIRECT_URL = "http://localhost:5173/"
+
 # email console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

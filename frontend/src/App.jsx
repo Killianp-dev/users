@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import axios from 'axios'
 import './App.css'
 
 function App() {
@@ -37,9 +38,8 @@ function App() {
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        await fetch('/api/login/', {
-          method: 'GET',
-          credentials: 'include',
+        await axios.get('/api/csrf/', {
+          withCredentials: true,
         });
         console.log('CSRF Token récupéré:', getCookie('csrftoken'));
       } catch (error) {
@@ -119,32 +119,33 @@ function App() {
         dataToSend.confirmPassword = formData.confirmPassword;
       }
       
-      const response = await fetch(endpoint, {
-        method: 'POST',
+      const csrftoken = getCookie('csrftoken');
+      const response = await axios({
+        method: 'post',
+        url: endpoint,
+        data: dataToSend,
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRFToken': getCookie('csrftoken'),
+          'X-CSRFToken': csrftoken,
         },
-        credentials: 'include', // Necessary for cookies
-        body: JSON.stringify(dataToSend),
+        withCredentials: true,
       });
       
-      const data = await response.json();
+      const data = response.data;
       
-      if (response.ok) {
+      if (response.status === 200 || response.status === 201) {
         console.log('Success:', data);
         // Redirect to profile page or dashboard
         window.location.href = '/accounts/profile/';
-      } else {
-        console.error('Error:', data);
-        // Handle API errors
-        if (data.error) {
-          setErrors({ api: data.error });
-        }
       }
     } catch (error) {
-      console.error('Network error:', error);
-      setErrors({ api: 'Erreur de connexion au serveur' });
+      console.error('Error:', error);
+      // Handle API errors
+      if (error.response && error.response.data && error.response.data.error) {
+        setErrors({ api: error.response.data.error });
+      } else {
+        setErrors({ api: 'Erreur de connexion au serveur' });
+      }
     }
   };
 

@@ -17,13 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from .views import index, ProfileView, LoginAPIView, SignupAPIView
+from .views import index, ProfileView, LoginAPIView, SignupAPIView, CSRFTokenView
+from users.views import UserProfileAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', ProfileView.as_view(), name='profile'),
+    path('api/csrf/', CSRFTokenView.as_view(), name='api_csrf'),
     path('api/login/', LoginAPIView.as_view(), name='api_login'),
     path('api/signup/', SignupAPIView.as_view(), name='api_signup'),
+    path('api/profile/', UserProfileAPIView.as_view(), name='api_profile'),
 ]

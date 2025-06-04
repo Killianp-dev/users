@@ -225,9 +225,12 @@ input:focus {
   margin-top: 0.25rem;
   margin-bottom: 0.5rem;
   padding: 0.5rem;
-  background-color: #fee2e2;
   border-radius: 0.25rem;
-  border-left: 3px solid #ef4444;
+}
+
+.error-message::before {
+  content: "❌";
+  margin-right: 0.5rem;
 }
 
 .password-checklist {
@@ -285,5 +288,94 @@ input:focus {
 }
 
 .password-checklist li.invalid {
-  color: #94a3b8; /* Slate 400 */
+  color: #ef4444;
+}
+
+/* New styles for auth pages */
+.auth-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.auth-message {
+  background-color: rgba(30, 41, 59, 0.6);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.auth-message.success {
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+
+.auth-message.info {
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #60a5fa;
+}
+
+.auth-message.warning {
+  border-color: rgba(234, 179, 8, 0.3);
+  color: #eab308;
+}
+
+.btn-secondary {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  color: white;
+  background-color: var(--primary-light);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+}
+
+.btn-secondary:hover {
+  background-color: var(--border-color);
+}
+
+.btn-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-group .btn-primary, 
+.btn-group .btn-secondary {
+  margin-top: 0;
+}
+
+.email-list {
+  margin-bottom: 1.5rem;
+}
+
+.email-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--primary);
+  border-radius: 0.5rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--border-color);
+}
+
+.email-item.primary {
+  border-color: var(--accent-indigo);
+  background-color: rgba(79, 70, 229, 0.1);
+}
+
+.email-item-actions {
+  display: flex;
+  gap: 0.5rem;
 }

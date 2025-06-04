@@ -1,21 +1,25 @@
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView
 from django.contrib.auth import authenticate, login
-from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-import json
 import re
 
 from users.models import CustomUser
+from users.serializers import UserSerializer, UserCreateSerializer, LoginSerializer
 
 
-class ProfileView(LoginRequiredMixin, TemplateView):
-    template_name = 'account/profile.html'
+class ProfileView(LoginRequiredMixin, RedirectView):
+    """Rediriger l'utilisateur vers l'interface React après connexion."""
+    permanent = False
+    
+    def get_redirect_url(self, *args, **kwargs):
+        # Rediriger vers l'interface frontend (React)
+        return "http://localhost:5173/"
 
 
 def index(request):
@@ -46,21 +50,40 @@ def validate_password_strength(password):
 
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
+class CSRFTokenView(APIView):
+    """API view that sets a CSRF cookie and returns a 200 OK response.
+    This endpoint is specifically for getting a CSRF token for forms."""
+    
+    def get(self, request):
+        return Response({
+            'success': True,
+            'message': 'CSRF cookie set'
+        }, status=status.HTTP_200_OK)
+
+
+@method_decorator(ensure_csrf_cookie, name='dispatch')
 class LoginAPIView(APIView):
     """API view for handling user login requests from the frontend."""
     
     def post(self, request):
-        data = json.loads(request.body)
-        email = data.get('email', '')
-        password = data.get('password', '')
+        serializer = LoginSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({
+                'success': False,
+                'error': serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        email = serializer.validated_data['email']
+        password = serializer.validated_data['password']
         
         user = authenticate(request, username=email, password=password)
         
         if user is not None:
             login(request, user)
+            user_serializer = UserSerializer(user)
             return Response({
                 'success': True,
-                'email': user.email,
+                'user': user_serializer.data
             }, status=status.HTTP_200_OK)
         else:
             return Response({
@@ -74,23 +97,14 @@ class SignupAPIView(APIView):
     """API view for handling user registration requests from the frontend."""
     
     def post(self, request):
-        data = json.loads(request.body)
-        email = data.get('email', '')
-        password = data.get('password', '')
-        confirm_password = data.get('confirmPassword', '')
-        
-        if not email or not password:
+        serializer = UserCreateSerializer(data=request.data)
+        if not serializer.is_valid():
             return Response({
                 'success': False,
-                'error': 'Email et mot de passe requis'
+                'error': serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        # Vérifier si les mots de passe correspondent
-        if 'confirmPassword' in data and password != confirm_password:
-            return Response({
-                'success': False,
-                'error': 'Les mots de passe ne correspondent pas'
-            }, status=status.HTTP_400_BAD_REQUEST)
+        password = serializer.validated_data['password']
         
         # Vérifier la force du mot de passe
         is_valid, error_message = validate_password_strength(password)
@@ -100,20 +114,14 @@ class SignupAPIView(APIView):
                 'error': error_message
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        # Check if user already exists
-        if CustomUser.objects.filter(email=email).exists():
-            return Response({
-                'success': False,
-                'error': 'Un utilisateur avec cet email existe déjà'
-            }, status=status.HTTP_400_BAD_REQUEST)
-        
         # Create user
         try:
-            user = CustomUser.objects.create_user(email=email, password=password)
+            user = serializer.save()
             login(request, user)
+            user_serializer = UserSerializer(user)
             return Response({
                 'success': True,
-                'email': user.email
+                'user': user_serializer.data
             }, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({

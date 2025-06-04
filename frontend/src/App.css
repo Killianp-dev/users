@@ -1,0 +1,289 @@
+:root {
+  --primary-dark: #0f172a;
+  --primary: #1e293b;
+  --primary-light: #334155;
+  --accent-indigo: #4f46e5;
+  --accent-purple: #7e22ce;
+  --accent-blue: #3b82f6;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --border-color: #475569;
+  --transition-speed: 0.3s;
+  --gradient-1: #1e1b4b;
+  --gradient-2: #312e81;
+  --gradient-3: #1e3a8a;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background-color: var(--primary-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Animating background */
+.auth-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.auth-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    130deg,
+    var(--gradient-1),
+    var(--gradient-2),
+    var(--gradient-3),
+    var(--gradient-2)
+  );
+  background-size: 300% 300%;
+  z-index: -1;
+  animation: gradientBreathing 15s ease infinite;
+}
+
+@keyframes gradientBreathing {
+  0% {
+    background-position: 0% 50%;
+    opacity: 0.97;
+  }
+  50% {
+    background-position: 100% 50%;
+    opacity: 0.9;
+  }
+  100% {
+    background-position: 0% 50%;
+    opacity: 0.97;
+  }
+}
+
+.auth-main {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-card {
+  background-color: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+  width: 100%;
+  max-width: 420px;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.3), 
+              0 10px 30px rgba(79, 70, 229, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform var(--transition-speed), 
+              box-shadow var(--transition-speed);
+}
+
+.auth-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.4), 
+              0 15px 40px rgba(79, 70, 229, 0.15);
+}
+
+.auth-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.auth-logo svg {
+  filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.5));
+}
+
+.auth-logo h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(to right, var(--accent-purple), var(--accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  background-color: var(--primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  transition: border-color var(--transition-speed), 
+              box-shadow var(--transition-speed);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--accent-indigo);
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.25);
+}
+
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  color: white;
+  background: linear-gradient(to right, var(--accent-indigo), var(--accent-purple));
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform var(--transition-speed), 
+              filter var(--transition-speed),
+              box-shadow var(--transition-speed);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(110%);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.auth-toggle {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.auth-toggle p {
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--accent-blue);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--transition-speed);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.btn-link:hover {
+  color: var(--accent-indigo);
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 1.5rem;
+  }
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  background-color: #fee2e2;
+  border-radius: 0.25rem;
+  border-left: 3px solid #ef4444;
+}
+
+.password-checklist {
+  margin-top: 0.75rem;
+  padding: 1rem;
+  background-color: rgba(30, 41, 59, 0.6);
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.password-checklist p {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.password-checklist ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.password-checklist li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+.password-checklist li::before {
+  content: "";
+  display: inline-block;
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  background-color: rgba(100, 116, 139, 0.3);
+  transition: background-color 0.2s;
+}
+
+.password-checklist li.valid {
+  color: #10b981; /* Green */
+}
+
+.password-checklist li.valid::before {
+  background-color: #10b981;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='24px' height='24px'%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+  background-size: 75%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.password-checklist li.invalid {
+  color: #94a3b8; /* Slate 400 */
+}

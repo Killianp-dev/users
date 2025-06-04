@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'allauth',
     'allauth.account',
+    'rest_framework',
+    'corsheaders',
     'users',
 ]
 
@@ -67,6 +69,7 @@ AUTHENTICATION_BACKENDS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -164,11 +167,29 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # Désactive le champ username
 ACCOUNT_AUTHENTICATION_METHOD = "email"  # Utiliser uniquement l'email pour l'authentification
 ACCOUNT_EMAIL_REQUIRED = True  # Exiger l'email pour l'inscription
 ACCOUNT_USERNAME_REQUIRED = False  # Désactiver le champ username
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # Activer la vérification d'email
+ACCOUNT_EMAIL_VERIFICATION = "none"  # Activer la vérification d'email
 
 # email console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # site_id
 SITE_ID = 1
+
+# Configuration CORS
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Vite default development server
+]
+
+# Paramètres CSRF
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+]
+
+# Settings REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
 

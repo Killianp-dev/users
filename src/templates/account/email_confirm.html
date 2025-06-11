@@ -1,0 +1,54 @@
+{% extends "base/layout.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Confirmation d'email" %} | Mon Site{% endblock %}
+{% block meta_description %}Confirmez votre adresse email pour activer votre compte{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1 class="auth-title">{% trans "Confirmation d'email" %}</h1>
+            {% if confirmation %}
+                <p class="auth-subtitle">{% trans "Confirmez votre adresse email" %}</p>
+            {% else %}
+                <p class="auth-subtitle">{% trans "Lien de confirmation invalide ou expiré" %}</p>
+            {% endif %}
+        </div>
+
+        <div class="auth-content">
+            {% if confirmation %}
+                <p class="confirmation-message">
+                    {% trans "Veuillez confirmer que" %} <strong>{{ confirmation.email_address.email }}</strong> {% trans "est bien votre adresse email." %}
+                </p>
+
+                <form method="post" action="{% url 'account_confirm_email' confirmation.key %}" class="auth-form">
+                    {% csrf_token %}
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-block">{% trans "Confirmer" %}</button>
+                    </div>
+                </form>
+            {% else %}
+                <div class="error-message">
+                    <p>{% trans "Ce lien de confirmation d'email a expiré ou est invalide." %}</p>
+                    <p>{% trans "Veuillez" %} <a href="{% url 'account_email' %}">{% trans "demander un nouveau lien de confirmation" %}</a>.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="auth-footer">
+            <a href="{% url 'profile' %}" class="btn btn-link">{% trans "Retour au profil" %}</a>
+            <a href="{% url 'home' %}" class="btn btn-link">{% trans "Retour à l'accueil" %}</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/pages/auth.js' %}"></script>
+{% endblock %} 

@@ -1,0 +1,124 @@
+{% extends "base/layout.html" %}
+{% load i18n %}
+{% load account %}
+{% load static %}
+
+{% block title %}{% trans "Gestion des emails" %} | Mon Site{% endblock %}
+{% block meta_description %}Gérez vos adresses email associées à votre compte{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1 class="auth-title">{% trans "Gestion des emails" %}</h1>
+            <p class="auth-subtitle">{% trans "Gérez les adresses email associées à votre compte" %}</p>
+        </div>
+
+        <div class="profile-content">
+            {% if user.emailaddress_set.all %}
+            <div class="profile-section">
+                <h2>{% trans "Adresses email" %}</h2>
+                <p>{% trans "Les adresses suivantes sont associées à votre compte :" %}</p>
+                
+                <form action="{% url 'account_email' %}" method="post" class="auth-form">
+                    {% csrf_token %}
+                    
+                    <div class="email-list">
+                        {% for emailaddress in user.emailaddress_set.all %}
+                        <div class="email-item">
+                            <div class="email-radio">
+                                <input id="email_radio_{{forloop.counter}}" type="radio" name="email" 
+                                       {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{% endif %} 
+                                       value="{{emailaddress.email}}">
+                            </div>
+                            <div class="email-details">
+                                <label for="email_radio_{{forloop.counter}}" class="email-label">
+                                    {{ emailaddress.email }}
+                                </label>
+                                <div class="email-status">
+                                    {% if emailaddress.verified %}
+                                    <span class="badge badge-success">{% trans "Vérifiée" %}</span>
+                                    {% else %}
+                                    <span class="badge badge-warning">{% trans "Non vérifiée" %}</span>
+                                    {% endif %}
+                                    
+                                    {% if emailaddress.primary %}
+                                    <span class="badge badge-primary">{% trans "Principale" %}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="email-actions">
+                        <button class="btn btn-outline" type="submit" name="action_primary">{% trans "Définir comme principale" %}</button>
+                        <button class="btn btn-outline" type="submit" name="action_send">{% trans "Envoyer un email de vérification" %}</button>
+                        <button class="btn btn-danger" type="submit" name="action_remove">{% trans "Supprimer" %}</button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+
+            <div class="profile-section">
+                <h2>{% trans "Ajouter une adresse email" %}</h2>
+                
+                <form method="post" action="{% url 'account_email' %}" class="auth-form">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {% for error in form.non_field_errors %}
+                            <p class="error-message">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="form-group">
+                        <label for="id_email">{% trans "Email" %}</label>
+                        <input type="email" name="email" placeholder="nouvelle@email.com" id="id_email" required class="form-control {% if form.email.errors %}is-invalid{% endif %}">
+                        {% if form.email.errors %}
+                            <div class="field-error">
+                                {% for error in form.email.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button name="action_add" type="submit" class="btn btn-primary">{% trans "Ajouter" %}</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="back-to-profile">
+                <a href="{% url 'profile' %}" class="btn btn-link">{% trans "Retour au profil" %}</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/pages/auth.js' %}"></script>
+<script type="text/javascript">
+(function() {
+    // Gère la suppression d'email avec confirmation
+    document.addEventListener('DOMContentLoaded', function() {
+        const removeBtn = document.querySelector('button[name="action_remove"]');
+        if (removeBtn) {
+            removeBtn.addEventListener('click', function(e) {
+                if (!confirm("{% trans 'Êtes-vous sûr de vouloir supprimer l\'adresse email sélectionnée ?' %}")) {
+                    e.preventDefault();
+                }
+            });
+        }
+    });
+})();
+</script>
+{% endblock %} 

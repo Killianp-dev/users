@@ -166,6 +166,14 @@ ACCOUNT_EMAIL_REQUIRED = True  # Exiger l'email pour l'inscription
 ACCOUNT_USERNAME_REQUIRED = False  # Désactiver le champ username
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # Activer la vérification d'email
 
+# Configurations supplémentaires pour Allauth
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5  # Limite le nombre de tentatives de connexion
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # Délai d'attente en secondes après trop de tentatives
+ACCOUNT_LOGOUT_ON_GET = False  # Désactive la déconnexion par GET, nécessite une requête POST avec CSRF
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True  # Connexion automatique après confirmation d'email
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3  # Durée de validité du lien de confirmation
+ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN = 180  # Délai minimum entre deux envois de confirmation
+
 # email console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

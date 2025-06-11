@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mon Site{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Site web d'utilisateurs{% endblock %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/variables.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/buttons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/navigation.css' %}">
+    {% block extra_css %}{% endblock %}
+    
+    <!-- Scripts -->
+    <script defer src="{% static 'js/components/navigation.js' %}"></script>
+    <script defer src="{% static 'js/components/forms.js' %}"></script>
+    <script defer src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'images/logo.svg' %}" alt="Logo du site">
+                </a>
+            </div>
+            
+            <nav class="main-nav">
+                <button class="mobile-menu-toggle" aria-label="Menu">
+                    <span class="burger-icon"></span>
+                </button>
+                
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="{% url 'home' %}" class="nav-link {% if request.path == '/' %}active{% endif %}">Accueil</a></li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a href="{% url 'profile' %}" class="nav-link {% if 'profile' in request.path %}active{% endif %}">Mon compte</a></li>
+                        <li class="nav-item"><a href="{% url 'account_logout' %}" class="nav-link">Déconnexion</a></li>
+                    {% else %}
+                        <li class="nav-item"><a href="{% url 'account_login' %}" class="nav-link {% if 'login' in request.path %}active{% endif %}">Connexion</a></li>
+                        <li class="nav-item"><a href="{% url 'account_signup' %}" class="nav-link {% if 'signup' in request.path %}active{% endif %}">Inscription</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message message--{{ message.tags }}">
+                            {{ message }}
+                            <button class="message-close" aria-label="Fermer">&times;</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>À propos</h3>
+                    <p>Un site web moderne pour la gestion des utilisateurs.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Liens utiles</h3>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Accueil</a></li>
+                        <li><a href="#">Mentions légales</a></li>
+                        <li><a href="#">Politique de confidentialité</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>Email: contact@example.com</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; {% now "Y" %} Mon Site. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Initialisation des composants après le chargement du DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fermeture des messages de notification
+            document.querySelectorAll('.message-close').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    this.parentElement.remove();
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

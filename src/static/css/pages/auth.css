@@ -1,0 +1,226 @@
+/* Conteneur principal pour les pages d'authentification */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-8) var(--spacing-4);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 500px;
+    background-color: white;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--spacing-8);
+}
+
+/* En-tête du formulaire */
+.auth-header {
+    text-align: center;
+    margin-bottom: var(--spacing-6);
+}
+
+.auth-title {
+    font-size: var(--font-size-2xl);
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-3);
+}
+
+.auth-subtitle {
+    font-size: var(--font-size-base);
+    color: var(--text-muted);
+}
+
+.auth-subtitle a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.auth-subtitle a:hover {
+    text-decoration: underline;
+}
+
+/* Formulaire */
+.auth-form {
+    margin-bottom: var(--spacing-4);
+}
+
+/* Styles spécifiques pour le mot de passe */
+.password-requirements {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+    margin-top: var(--spacing-2);
+}
+
+.requirement {
+    font-size: var(--font-size-sm);
+    color: var(--gray-600);
+    background-color: var(--gray-200);
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--border-radius-sm);
+    position: relative;
+    transition: all var(--transition-fast) ease-in-out;
+}
+
+.requirement.valid {
+    color: white;
+    background-color: var(--success-color);
+}
+
+/* Séparateur pour les méthodes de connexion alternatives */
+.social-login {
+    margin-top: var(--spacing-6);
+}
+
+.social-login-divider {
+    position: relative;
+    text-align: center;
+    margin-bottom: var(--spacing-4);
+}
+
+.social-login-divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: var(--border-light);
+    z-index: 1;
+}
+
+.social-login-divider span {
+    position: relative;
+    padding: 0 var(--spacing-2);
+    background-color: white;
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+    z-index: 2;
+}
+
+.social-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+/* Styles pour la vérification d'email */
+.verification-message {
+    text-align: center;
+    background-color: var(--primary-color-light);
+    padding: var(--spacing-6);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: var(--spacing-6);
+}
+
+.verification-message h2 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-3);
+}
+
+.verification-message p {
+    margin-bottom: var(--spacing-4);
+}
+
+.resend-button {
+    margin-top: var(--spacing-4);
+}
+
+/* Styles pour la réinitialisation de mot de passe */
+.reset-instructions {
+    margin-bottom: var(--spacing-6);
+    color: var(--text-muted);
+}
+
+/* Styles pour les messages de succès */
+.success-message {
+    text-align: center;
+    background-color: #d4edda;
+    color: #155724;
+    padding: var(--spacing-6);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: var(--spacing-6);
+}
+
+.success-message h2 {
+    color: #155724;
+    margin-bottom: var(--spacing-3);
+}
+
+.success-message p {
+    margin-bottom: var(--spacing-4);
+}
+
+/* Styles pour la page de profil */
+.profile-content {
+    margin-top: var(--spacing-6);
+}
+
+.profile-section {
+    margin-bottom: var(--spacing-6);
+}
+
+.profile-section h2 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-4);
+    color: var(--text-dark);
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: var(--spacing-2);
+}
+
+.profile-info {
+    display: grid;
+    gap: var(--spacing-4);
+}
+
+.info-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-group label {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-1);
+}
+
+.info-group p {
+    font-size: var(--font-size-md);
+    margin: 0;
+}
+
+.profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-3);
+    margin-top: var(--spacing-6);
+    padding-top: var(--spacing-4);
+    border-top: 1px solid var(--border-light);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .auth-card {
+        padding: var(--spacing-6) var(--spacing-4);
+        box-shadow: none;
+        border: 1px solid var(--border-light);
+    }
+    
+    .auth-title {
+        font-size: var(--font-size-xl);
+    }
+    
+    .auth-subtitle {
+        font-size: var(--font-size-sm);
+    }
+    
+    .profile-actions {
+        flex-direction: column;
+    }
+    
+    .profile-actions .btn {
+        width: 100%;
+    }
+} 

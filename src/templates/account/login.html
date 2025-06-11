@@ -1,68 +1,104 @@
-{% extends "account/base_entrance.html" %}
+{% extends "base/layout.html" %}
 {% load i18n %}
-{% load allauth account %}
+{% load account %}
+{% load static %}
 
-{% block head_title %}
-    {% trans "Sign In" %}
-{% endblock head_title %}
+{% block title %}{% trans "Connexion" %} | Mon Site{% endblock %}
+{% block meta_description %}Connectez-vous à votre compte pour accéder à notre plateforme{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/auth.css' %}">
+{% endblock %}
 
 {% block content %}
-    {% element h1 %}
-        {% trans "Sign In" %}
-    {% endelement %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1 class="auth-title">{% trans "Connexion" %}</h1>
+            <p class="auth-subtitle">{% blocktrans %}Si vous n'avez pas encore de compte, <a href="{{ signup_url }}">inscrivez-vous</a> d'abord.{% endblocktrans %}</p>
+        </div>
 
-    {% if not SOCIALACCOUNT_ONLY %}
-        {% setvar link %}
-            <a href="{{ signup_url }}">
-        {% endsetvar %}
-        {% setvar end_link %}
-            </a>
-        {% endsetvar %}
-        {% element p %}
-            {% blocktranslate %}If you have not created an account yet, then please {{ link }}sign up{{ end_link }} first.{% endblocktranslate %}
-        {% endelement %}
-
-        {% url 'account_login' as login_url %}
-        {% element form form=form method="post" action=login_url tags="entrance,login" %}
-            {% slot body %}
-                {% csrf_token %}
-                {% element fields form=form unlabeled=True %}
-                {% endelement %}
-                {{ redirect_field }}
-            {% endslot %}
-            {% slot actions %}
-                {% element button type="submit" tags="prominent,login" %}
-                    {% trans "Sign In" %}
-                {% endelement %}
-            {% endslot %}
-        {% endelement %}
-    {% endif %}
-
-    {% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED %}
-        {% element hr %}
-        {% endelement %}
-        {% element button_group vertical=True %}
-            {% if PASSKEY_LOGIN_ENABLED %}
-                {% element button type="submit" form="mfa_login" id="passkey_login" tags="prominent,login,outline,primary" %}
-                    {% trans "Sign in with a passkey" %}
-                {% endelement %}
+        <form class="auth-form" method="POST" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="form-errors">
+                {% for error in form.non_field_errors %}
+                    <p class="error-message">{{ error }}</p>
+                {% endfor %}
+            </div>
             {% endif %}
-            {% if LOGIN_BY_CODE_ENABLED %}
-                {% element button href=request_login_code_url tags="prominent,login,outline,primary" %}
-                    {% trans "Mail me a sign-in code" %}
-                {% endelement %}
+            
+            <div class="form-group">
+                <label for="id_login">{% trans "Email" %}</label>
+                <input type="email" name="login" placeholder="votre@email.com" id="id_login" required class="form-control {% if form.login.errors %}is-invalid{% endif %}">
+                {% if form.login.errors %}
+                    <div class="field-error">
+                        {% for error in form.login.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <div class="password-field-wrapper">
+                    <label for="id_password">{% trans "Mot de passe" %}</label>
+                    <a href="{% url 'account_reset_password' %}" class="password-reset-link">{% trans "Mot de passe oublié ?" %}</a>
+                </div>
+                <div class="password-input-wrapper">
+                    <input type="password" name="password" placeholder="Votre mot de passe" id="id_password" required class="form-control {% if form.password.errors %}is-invalid{% endif %}">
+                    <button type="button" class="password-toggle" aria-label="Afficher/masquer le mot de passe">
+                        <svg class="eye-icon" viewBox="0 0 24 24" width="18" height="18">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
+                    </button>
+                </div>
+                {% if form.password.errors %}
+                    <div class="field-error">
+                        {% for error in form.password.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group form-check">
+                <input type="checkbox" name="remember" id="id_remember" class="form-check-input">
+                <label for="id_remember" class="form-check-label">{% trans "Se souvenir de moi" %}</label>
+            </div>
+            
+            {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
             {% endif %}
-        {% endelement %}
-    {% endif %}
-
-    {% if SOCIALACCOUNT_ENABLED %}
-        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-    {% endif %}
-{% endblock content %}
-
-{% block extra_body %}
-    {{ block.super }}
-    {% if PASSKEY_LOGIN_ENABLED %}
-        {% include "mfa/webauthn/snippets/login_script.html" with button_id="passkey_login" %}
-    {% endif %}
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-block">{% trans "Se connecter" %}</button>
+            </div>
+        </form>
+        
+        {% comment %}
+        <!-- Réactivez cette section si vous souhaitez activer la connexion via réseaux sociaux -->
+        <div class="social-login">
+            <div class="social-login-divider">
+                <span>{% trans "Ou connectez-vous avec" %}</span>
+            </div>
+            <div class="social-buttons">
+                <a href="/accounts/google/login/" class="btn btn-social btn-google">
+                    <img src="{% static 'images/google-icon.svg' %}" alt="Google">
+                    Google
+                </a>
+                <a href="/accounts/facebook/login/" class="btn btn-social btn-facebook">
+                    <img src="{% static 'images/facebook-icon.svg' %}" alt="Facebook">
+                    Facebook
+                </a>
+            </div>
+        </div>
+        {% endcomment %}
+    </div>
+</div>
 {% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/pages/auth.js' %}"></script>
+{% endblock %} 

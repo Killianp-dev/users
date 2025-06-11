@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 
@@ -8,4 +8,4 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
 
 def index(request):
-    return redirect('account_login')
+    return render(request, 'home.html')

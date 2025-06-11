@@ -1,0 +1,74 @@
+{% extends "base/layout.html" %}
+{% load static %}
+
+{% block title %}Accueil | Mon Site{% endblock %}
+{% block meta_description %}Bienvenue sur notre site web de gestion d'utilisateurs{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/home.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>Bienvenue sur notre plateforme</h1>
+        <p class="hero-subtitle">Une solution moderne pour la gestion des utilisateurs</p>
+        {% if not user.is_authenticated %}
+            <div class="hero-cta">
+                <a href="{% url 'account_signup' %}" class="btn btn-primary">Créer un compte</a>
+                <a href="{% url 'account_login' %}" class="btn btn-outline">Se connecter</a>
+            </div>
+        {% else %}
+            <div class="hero-cta">
+                <a href="{% url 'profile' %}" class="btn btn-primary">Mon compte</a>
+            </div>
+        {% endif %}
+    </div>
+    <div class="hero-image">
+        <img src="{% static 'images/hero-illustration.svg' %}" alt="Illustration" class="hero-img">
+    </div>
+</section>
+
+<section class="features">
+    <h2 class="section-title">Nos fonctionnalités</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{% static 'images/icon-secure.svg' %}" alt="Sécurité">
+            </div>
+            <h3>Authentification sécurisée</h3>
+            <p>Protégez vos données avec notre système d'authentification robuste.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{% static 'images/icon-profile.svg' %}" alt="Profil">
+            </div>
+            <h3>Gestion de profil</h3>
+            <p>Personnalisez votre profil et gérez vos informations personnelles facilement.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{% static 'images/icon-responsive.svg' %}" alt="Responsive">
+            </div>
+            <h3>Design responsive</h3>
+            <p>Profitez d'une expérience optimale sur tous vos appareils.</p>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="cta-content">
+        <h2>Prêt à commencer ?</h2>
+        <p>Rejoignez notre communauté dès aujourd'hui et profitez de toutes nos fonctionnalités.</p>
+        {% if not user.is_authenticated %}
+            <a href="{% url 'account_signup' %}" class="btn btn-primary">S'inscrire maintenant</a>
+        {% else %}
+            <a href="{% url 'profile' %}" class="btn btn-primary">Accéder à mon compte</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/pages/home.js' %}"></script>
+{% endblock %} 

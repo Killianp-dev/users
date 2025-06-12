@@ -8,3 +8,39 @@
   * the scope of this path.
   */
 @source "../../../**/*.{html,py,js}";
+
+
+@layer components {
+  .hamburger {
+    @apply w-6 h-6 relative cursor-pointer;
+  }
+
+  .hamburger-line {
+    @apply w-full h-0.5 bg-black absolute left-0 transition-all duration-300;
+  }
+
+  .hamburger-line-1 {
+    @apply top-1;
+  }
+
+  .hamburger-line-2 {
+    @apply top-1/2 -translate-y-1/2;
+  }
+
+  .hamburger-line-3 {
+    @apply bottom-1;
+  }
+
+  .hamburger.active .hamburger-line-1 {
+    @apply rotate-45 translate-y-2;
+  }
+
+  .hamburger.active .hamburger-line-2 {
+    @apply opacity-0;
+  }
+
+  .hamburger.active .hamburger-line-3 {
+    @apply -rotate-45 -translate-y-2;
+  }
+}
+

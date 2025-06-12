@@ -6,91 +6,121 @@
 {% block title %}{% trans "Connexion" %} | Mon Site{% endblock %}
 {% block meta_description %}Connectez-vous à votre compte pour accéder à notre plateforme{% endblock %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/pages/auth.css' %}">
-{% endblock %}
-
 {% block content %}
-<div class="auth-container">
-    <div class="auth-card">
-        <div class="auth-header">
-            <h1 class="auth-title">{% trans "Connexion" %}</h1>
-            <p class="auth-subtitle">{% blocktrans %}Si vous n'avez pas encore de compte, <a href="{{ signup_url }}">inscrivez-vous</a> d'abord.{% endblocktrans %}</p>
+<div class="min-h-[80vh] flex items-center justify-center sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-sm">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-gray-900">{% trans "Connexion" %}</h1>
+            <p class="mt-2 text-sm text-gray-600">
+                {% blocktrans %}Si vous n'avez pas encore de compte, <a href="{{ signup_url }}" class="font-medium text-indigo-600 hover:text-indigo-500">inscrivez-vous</a> d'abord.{% endblocktrans %}
+            </p>
         </div>
 
-        <form class="auth-form" method="POST" action="{% url 'account_login' %}">
+        <form class="mt-8 space-y-6" method="POST" action="{% url 'account_login' %}">
             {% csrf_token %}
             
             {% if form.non_field_errors %}
-            <div class="form-errors">
-                {% for error in form.non_field_errors %}
-                    <p class="error-message">{{ error }}</p>
-                {% endfor %}
+            <div class="rounded-md bg-red-50 p-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        {% for error in form.non_field_errors %}
+                            <p class="text-sm text-red-700">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
             {% endif %}
             
-            <div class="form-group">
-                <label for="id_login">{% trans "Email" %}</label>
-                <input type="email" name="login" placeholder="votre@email.com" id="id_login" required class="form-control {% if form.login.errors %}is-invalid{% endif %}">
-                {% if form.login.errors %}
-                    <div class="field-error">
-                        {% for error in form.login.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
+            <div class="space-y-4">
+                <div>
+                    <label for="id_login" class="block text-sm font-medium text-gray-700">{% trans "Email" %}</label>
+                    <div class="mt-1">
+                        <input type="email" name="login" id="id_login" required
+                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm {% if form.login.errors %}border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500{% endif %}"
+                            placeholder="votre@email.com">
+                        {% if form.login.errors %}
+                            <div class="mt-2 text-sm text-red-600">
+                                {% for error in form.login.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <div class="password-field-wrapper">
-                    <label for="id_password">{% trans "Mot de passe" %}</label>
-                    <a href="{% url 'account_reset_password' %}" class="password-reset-link">{% trans "Mot de passe oublié ?" %}</a>
                 </div>
-                <div class="password-input-wrapper">
-                    <input type="password" name="password" placeholder="Votre mot de passe" id="id_password" required class="form-control {% if form.password.errors %}is-invalid{% endif %}">
-                    <button type="button" class="password-toggle" aria-label="Afficher/masquer le mot de passe">
-                        <svg class="eye-icon" viewBox="0 0 24 24" width="18" height="18">
-                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-                        </svg>
-                    </button>
-                </div>
-                {% if form.password.errors %}
-                    <div class="field-error">
-                        {% for error in form.password.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
+
+                <div>
+                    <div class="flex items-center justify-between">
+                        <label for="id_password" class="block text-sm font-medium text-gray-700">{% trans "Mot de passe" %}</label>
+                        <a href="{% url 'account_reset_password' %}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                            {% trans "Mot de passe oublié ?" %}
+                        </a>
                     </div>
-                {% endif %}
+                    <div class="mt-1 relative">
+                        <input type="password" name="password" id="id_password" required
+                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm {% if form.password.errors %}border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500{% endif %}"
+                            placeholder="Votre mot de passe">
+                        <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-500 focus:outline-none" aria-label="Afficher/masquer le mot de passe">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                    {% if form.password.errors %}
+                        <div class="mt-2 text-sm text-red-600">
+                            {% for error in form.password.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="flex items-center">
+                    <input type="checkbox" name="remember" id="id_remember"
+                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                    <label for="id_remember" class="ml-2 block text-sm text-gray-900">
+                        {% trans "Se souvenir de moi" %}
+                    </label>
+                </div>
             </div>
-            
-            <div class="form-group form-check">
-                <input type="checkbox" name="remember" id="id_remember" class="form-check-input">
-                <label for="id_remember" class="form-check-label">{% trans "Se souvenir de moi" %}</label>
-            </div>
-            
+
             {% if redirect_field_value %}
                 <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
             {% endif %}
-            
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary btn-block">{% trans "Se connecter" %}</button>
+
+            <div>
+                <button type="submit"
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    {% trans "Se connecter" %}
+                </button>
             </div>
         </form>
-        
+
         {% comment %}
         <!-- Réactivez cette section si vous souhaitez activer la connexion via réseaux sociaux -->
-        <div class="social-login">
-            <div class="social-login-divider">
-                <span>{% trans "Ou connectez-vous avec" %}</span>
+        <div class="mt-6">
+            <div class="relative">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-2 bg-white text-gray-500">{% trans "Ou connectez-vous avec" %}</span>
+                </div>
             </div>
-            <div class="social-buttons">
-                <a href="/accounts/google/login/" class="btn btn-social btn-google">
-                    <img src="{% static 'images/google-icon.svg' %}" alt="Google">
-                    Google
+
+            <div class="mt-6 grid grid-cols-2 gap-3">
+                <a href="/accounts/google/login/" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <img class="h-5 w-5" src="{% static 'images/google-icon.svg' %}" alt="Google">
+                    <span class="ml-2">Google</span>
                 </a>
-                <a href="/accounts/facebook/login/" class="btn btn-social btn-facebook">
-                    <img src="{% static 'images/facebook-icon.svg' %}" alt="Facebook">
-                    Facebook
+                <a href="/accounts/facebook/login/" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <img class="h-5 w-5" src="{% static 'images/facebook-icon.svg' %}" alt="Facebook">
+                    <span class="ml-2">Facebook</span>
                 </a>
             </div>
         </div>
@@ -100,5 +130,30 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/pages/auth.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordToggle = document.querySelector('button[aria-label="Afficher/masquer le mot de passe"]');
+    const passwordInput = document.getElementById('id_password');
+    
+    if (passwordToggle && passwordInput) {
+        passwordToggle.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            // Change l'icône
+            const svg = this.querySelector('svg');
+            if (type === 'text') {
+                svg.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                `;
+            } else {
+                svg.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                `;
+            }
+        });
+    }
+});
+</script>
 {% endblock %} 

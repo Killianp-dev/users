@@ -52,7 +52,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'allauth',
     'allauth.account',
+    'tailwind',
     'users',
+    'theme',
+    # Tailwind hot reload
+    'django_browser_reload'
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -68,6 +72,8 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    # Tailwind hot reload
+    'django_browser_reload.middleware.BrowserReloadMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -167,16 +173,22 @@ ACCOUNT_USERNAME_REQUIRED = False  # Désactiver le champ username
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # Activer la vérification d'email
 
 # Configurations supplémentaires pour Allauth
-ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5  # Limite le nombre de tentatives de connexion
-ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # Délai d'attente en secondes après trop de tentatives
 ACCOUNT_LOGOUT_ON_GET = False  # Désactive la déconnexion par GET, nécessite une requête POST avec CSRF
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True  # Connexion automatique après confirmation d'email
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3  # Durée de validité du lien de confirmation
-ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN = 180  # Délai minimum entre deux envois de confirmation
+ACCOUNT_RATE_LIMITS = {
+    # Limite pour les tentatives de connexion échouées
+    "login_failed": "5/m",  # 5 tentatives par minute
+    # Délai entre les envois de confirmation email
+    "confirm_email": "1/180s",  # 1 action tous les 180 secondes
+}
 
 # email console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # site_id
 SITE_ID = 1
+
+# Tailwind
+TAILWIND_APP_NAME = 'theme'
 

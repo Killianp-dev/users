@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="32" cy="32" r="32" fill="#EBEFFF"/>
-  <path d="M44 16H20C18.9 16 18 16.9 18 18V38C18 39.1 18.9 40 20 40H44C45.1 40 46 39.1 46 38V18C46 16.9 45.1 16 44 16ZM42 36H22V20H42V36Z" fill="#4A6CF7"/>
-  <path d="M24 24H40V32H24V24Z" fill="#4A6CF7" fill-opacity="0.3"/>
-  <path d="M36 42H28C26.9 42 26 42.9 26 44V46C26 47.1 26.9 48 28 48H36C37.1 48 38 47.1 38 46V44C38 42.9 37.1 42 36 42ZM34 46H30V44H34V46Z" fill="#4A6CF7"/>
-</svg> 

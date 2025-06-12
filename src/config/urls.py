@@ -26,6 +26,8 @@ urlpatterns = [
     path('', index, name='home'),
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', ProfileView.as_view(), name='profile'),
+    # Tailwind hot reload
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
 
 # Ajouter les fichiers statiques et media en développement

@@ -6,48 +6,51 @@
 {% block title %}{% trans "Gestion des emails" %} | Mon Site{% endblock %}
 {% block meta_description %}Gérez vos adresses email associées à votre compte{% endblock %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/pages/auth.css' %}">
-{% endblock %}
-
 {% block content %}
-<div class="auth-container">
-    <div class="auth-card">
-        <div class="auth-header">
-            <h1 class="auth-title">{% trans "Gestion des emails" %}</h1>
-            <p class="auth-subtitle">{% trans "Gérez les adresses email associées à votre compte" %}</p>
+<div class="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl w-full space-y-8 bg-white p-8 rounded-xl shadow-sm">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-gray-900">{% trans "Gestion des emails" %}</h1>
+            <p class="mt-2 text-sm text-gray-600">{% trans "Gérez les adresses email associées à votre compte" %}</p>
         </div>
 
-        <div class="profile-content">
+        <div class="space-y-8">
             {% if user.emailaddress_set.all %}
-            <div class="profile-section">
-                <h2>{% trans "Adresses email" %}</h2>
-                <p>{% trans "Les adresses suivantes sont associées à votre compte :" %}</p>
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">{% trans "Adresses email" %}</h2>
+                <p class="text-sm text-gray-600 mb-6">{% trans "Les adresses suivantes sont associées à votre compte :" %}</p>
                 
-                <form action="{% url 'account_email' %}" method="post" class="auth-form">
+                <form action="{% url 'account_email' %}" method="post" class="space-y-6">
                     {% csrf_token %}
                     
-                    <div class="email-list">
+                    <div class="space-y-4">
                         {% for emailaddress in user.emailaddress_set.all %}
-                        <div class="email-item">
-                            <div class="email-radio">
+                        <div class="flex items-start space-x-4 p-4 bg-white rounded-lg border border-gray-200">
+                            <div class="flex-shrink-0 pt-1">
                                 <input id="email_radio_{{forloop.counter}}" type="radio" name="email" 
                                        {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{% endif %} 
-                                       value="{{emailaddress.email}}">
+                                       value="{{emailaddress.email}}"
+                                       class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300">
                             </div>
-                            <div class="email-details">
-                                <label for="email_radio_{{forloop.counter}}" class="email-label">
+                            <div class="flex-1 min-w-0">
+                                <label for="email_radio_{{forloop.counter}}" class="block text-sm font-medium text-gray-900">
                                     {{ emailaddress.email }}
                                 </label>
-                                <div class="email-status">
+                                <div class="mt-2 flex flex-wrap gap-2">
                                     {% if emailaddress.verified %}
-                                    <span class="badge badge-success">{% trans "Vérifiée" %}</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        {% trans "Vérifiée" %}
+                                    </span>
                                     {% else %}
-                                    <span class="badge badge-warning">{% trans "Non vérifiée" %}</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        {% trans "Non vérifiée" %}
+                                    </span>
                                     {% endif %}
                                     
                                     {% if emailaddress.primary %}
-                                    <span class="badge badge-primary">{% trans "Principale" %}</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                        {% trans "Principale" %}
+                                    </span>
                                     {% endif %}
                                 </div>
                             </div>
@@ -55,34 +58,56 @@
                         {% endfor %}
                     </div>
 
-                    <div class="email-actions">
-                        <button class="btn btn-outline" type="submit" name="action_primary">{% trans "Définir comme principale" %}</button>
-                        <button class="btn btn-outline" type="submit" name="action_send">{% trans "Envoyer un email de vérification" %}</button>
-                        <button class="btn btn-danger" type="submit" name="action_remove">{% trans "Supprimer" %}</button>
+                    <div class="flex flex-wrap gap-4">
+                        <button type="submit" name="action_primary"
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            {% trans "Définir comme principale" %}
+                        </button>
+                        <button type="submit" name="action_send"
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            {% trans "Envoyer un email de vérification" %}
+                        </button>
+                        <button type="submit" name="action_remove"
+                            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            {% trans "Supprimer" %}
+                        </button>
                     </div>
                 </form>
             </div>
             {% endif %}
 
-            <div class="profile-section">
-                <h2>{% trans "Ajouter une adresse email" %}</h2>
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">{% trans "Ajouter une adresse email" %}</h2>
                 
-                <form method="post" action="{% url 'account_email' %}" class="auth-form">
+                <form method="post" action="{% url 'account_email' %}" class="space-y-6">
                     {% csrf_token %}
                     
                     {% if form.non_field_errors %}
-                    <div class="form-errors">
-                        {% for error in form.non_field_errors %}
-                            <p class="error-message">{{ error }}</p>
-                        {% endfor %}
+                    <div class="rounded-md bg-red-50 p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                {% for error in form.non_field_errors %}
+                                    <p class="text-sm text-red-700">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
                     {% endif %}
                     
-                    <div class="form-group">
-                        <label for="id_email">{% trans "Email" %}</label>
-                        <input type="email" name="email" placeholder="nouvelle@email.com" id="id_email" required class="form-control {% if form.email.errors %}is-invalid{% endif %}">
+                    <div>
+                        <label for="id_email" class="block text-sm font-medium text-gray-700">{% trans "Email" %}</label>
+                        <div class="mt-1">
+                            <input type="email" name="email" id="id_email" required
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm {% if form.email.errors %}border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500{% endif %}"
+                                placeholder="nouvelle@email.com">
+                        </div>
                         {% if form.email.errors %}
-                            <div class="field-error">
+                            <div class="mt-2 text-sm text-red-600">
                                 {% for error in form.email.errors %}
                                     <p>{{ error }}</p>
                                 {% endfor %}
@@ -90,14 +115,19 @@
                         {% endif %}
                     </div>
                     
-                    <div class="form-actions">
-                        <button name="action_add" type="submit" class="btn btn-primary">{% trans "Ajouter" %}</button>
+                    <div>
+                        <button name="action_add" type="submit"
+                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            {% trans "Ajouter" %}
+                        </button>
                     </div>
                 </form>
             </div>
 
-            <div class="back-to-profile">
-                <a href="{% url 'profile' %}" class="btn btn-link">{% trans "Retour au profil" %}</a>
+            <div class="text-center">
+                <a href="{% url 'profile' %}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                    {% trans "Retour au profil" %}
+                </a>
             </div>
         </div>
     </div>
@@ -105,7 +135,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/pages/auth.js' %}"></script>
 <script type="text/javascript">
 (function() {
     // Gère la suppression d'email avec confirmation
